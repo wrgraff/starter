@@ -40,6 +40,5 @@ Thumbs.db
 node_modules/
 .ai
 .psd
-.sketch
 .sublime-project
 .sublime-workspace
