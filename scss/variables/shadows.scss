@@ -1,0 +1,9 @@
+$shadows: (
+    1-lvl: $bit / 2,
+    2-lvl: $bit,
+    3-lvl: $bit * 2,
+);
+
+@function shadow($size, $color: rgba(color(black), .5)) {
+    @return 0 (map-get($shadows, $size) * 1.5) (map-get($shadows, $size) * 2.5) (map-get($shadows, $size) * -1.5) $color;
+}

@@ -1,0 +1,10 @@
+h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 ($bit * 3);
+    font-weight: font-weight(medium);
+}
+
+@for $i from 6 through 1 {
+    h#{7 - $i} {
+        font-size: rem-calc(8) + rem-calc(8 * $i / 2);
+    }
+}

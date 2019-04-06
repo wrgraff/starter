@@ -16,7 +16,7 @@ gulp.task('sass', function () {
             cascade: false
         }))
         // .pipe(cssmin())
-        .pipe(gulp.dest('dist/css'))
+        .pipe(gulp.dest('dist/static/css'))
         .pipe(livereload());
 });
 gulp.task('html', function () {
@@ -27,7 +27,7 @@ gulp.task('js', function() {
         .pipe(include())
         .pipe(uglify())
         .on('error', console.log)
-        .pipe(gulp.dest('dist/js'))
+        .pipe(gulp.dest('dist/static/js'))
         .pipe(livereload());
 });
 
