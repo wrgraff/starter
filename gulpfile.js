@@ -23,7 +23,7 @@ gulp.task('html', function () {
     return gulp.src('**/*.html').pipe(livereload());
 });
 gulp.task('js', function() {
-    return gulp.src('js/app.js')
+    return gulp.src('js/scripts.js')
         .pipe(include())
         .pipe(uglify())
         .on('error', console.log)

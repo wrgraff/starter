@@ -1,0 +1,1 @@
+const addElement=function(e,n){var t=document.createElement(e);return t.className=n,t};
