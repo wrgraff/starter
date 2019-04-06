@@ -44,6 +44,22 @@ h5 {
 h6 {
   font-size: 0.75rem; }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  color: #000;
+  font-family: "Roboto", sans-serif; }
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; }
+
+::-moz-focus-inner {
+  border: 0; }
+
 .page-layout {
   display: -webkit-box;
   display: -ms-flexbox;
