@@ -12,7 +12,6 @@ gulp.task('sass', function () {
     return gulp.src('scss/style.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({
-            browsers: ['last 2 versions'],
             cascade: false
         }))
         // .pipe(cssmin())
