@@ -1,48 +1,45 @@
 @font-face {
   font-family: "Roboto";
-  src: url("../fonts/roboto/roboto-regular.eot");
-  src: url("../fonts/roboto/roboto-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/roboto/roboto-regular.woff2") format("woff2"), url("../fonts/roboto/roboto-regular.woff") format("woff"), url("../fonts/roboto/roboto-regular.ttf") format("truetype"), url("../fonts/roboto/roboto-regular.svg#Roboto") format("svg");
+  src: local("Roboto"), url("../fonts/roboto/roboto-regular.woff2") format("woff2"), url("../fonts/roboto/roboto-regular.woff") format("woff"), url("../fonts/roboto/roboto-regular.eot") format("eot"), url("../fonts/roboto/roboto-regular.ttf") format("ttf");
   font-weight: 400;
   font-style: normal;
   font-display: swap; }
 
 @font-face {
   font-family: "Roboto";
-  src: url("../fonts/roboto/roboto-medium.eot");
-  src: url("../fonts/roboto/roboto-medium.eot?#iefix") format("embedded-opentype"), url("../fonts/roboto/roboto-medium.woff2") format("woff2"), url("../fonts/roboto/roboto-medium.woff") format("woff"), url("../fonts/roboto/roboto-medium.ttf") format("truetype"), url("../fonts/roboto/roboto-medium.svg#Roboto") format("svg");
+  src: local("Roboto"), url("../fonts/roboto/roboto-medium.woff2") format("woff2"), url("../fonts/roboto/roboto-medium.woff") format("woff"), url("../fonts/roboto/roboto-medium.eot") format("eot"), url("../fonts/roboto/roboto-medium.ttf") format("ttf");
   font-weight: 500;
   font-style: normal;
   font-display: swap; }
 
 @font-face {
   font-family: "Roboto";
-  src: url("../fonts/roboto/roboto-bold.eot");
-  src: url("../fonts/roboto/roboto-bold.eot?#iefix") format("embedded-opentype"), url("../fonts/roboto/roboto-bold.woff2") format("woff2"), url("../fonts/roboto/roboto-bold.woff") format("woff"), url("../fonts/roboto/roboto-bold.ttf") format("truetype"), url("../fonts/roboto/roboto-bold.svg#Roboto") format("svg");
+  src: local("Roboto"), url("../fonts/roboto/roboto-bold.woff2") format("woff2"), url("../fonts/roboto/roboto-bold.woff") format("woff"), url("../fonts/roboto/roboto-bold.eot") format("eot"), url("../fonts/roboto/roboto-bold.ttf") format("ttf");
   font-weight: 700;
   font-style: normal;
   font-display: swap; }
 
 h1, h2, h3, h4, h5, h6 {
-  margin: 0 0 1.5rem;
+  margin: 0 0 24px;
   font-weight: 500; }
 
 h1 {
-  font-size: 2rem; }
+  font-size: 32px; }
 
 h2 {
-  font-size: 1.75rem; }
+  font-size: 28px; }
 
 h3 {
-  font-size: 1.5rem; }
+  font-size: 24px; }
 
 h4 {
-  font-size: 1.25rem; }
+  font-size: 20px; }
 
 h5 {
-  font-size: 1rem; }
+  font-size: 16px; }
 
 h6 {
-  font-size: 0.75rem; }
+  font-size: 12px; }
 
 html,
 body {
