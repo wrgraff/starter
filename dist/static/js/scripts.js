@@ -1,1 +1,10 @@
-const addElement=function(e,n){var t=document.createElement(e);return t.className=n,t};
+// Site utils
+const addElement = function(elTag, elClass) {
+    var element = document.createElement(elTag);
+    element.className = elClass;
+
+    return element;
+};
+
+
+// Site apps

@@ -4,6 +4,8 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     jshint = require('gulp-jshint'),
     uglify = require('gulp-uglify-es').default,
+    rename = require('gulp-rename'),
+    clone = require('gulp-clone'),
     concat = require('gulp-concat'),
     include = require("gulp-include"),
     livereload = require('gulp-livereload');
@@ -14,7 +16,10 @@ gulp.task('sass', function () {
         .pipe(autoprefixer({
             cascade: false
         }))
-        // .pipe(cssmin())
+        .pipe(gulp.dest('dist/static/css'))
+        .pipe(clone())
+        .pipe(cssmin())
+        .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('dist/static/css'))
         .pipe(livereload());
 });
@@ -24,8 +29,10 @@ gulp.task('html', function () {
 gulp.task('js', function() {
     return gulp.src('src/js/scripts.js')
         .pipe(include())
-        .pipe(uglify())
         .on('error', console.log)
+        .pipe(gulp.dest('dist/static/js'))
+        .pipe(uglify())
+        .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('dist/static/js'))
         .pipe(livereload());
 });
