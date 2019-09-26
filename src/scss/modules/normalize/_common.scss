@@ -4,13 +4,25 @@
    ========================================================================== */
 
 /**
+ * Add inheriting to box-sizing property for all elements
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/**
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in iOS.
+ * 3. Add normal box-sizing to all document (all elements inherit it because previous rule)
  */
 
 html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
+  box-sizing: border-box; /* 3 */
 }
 
 /* Sections
@@ -51,7 +63,7 @@ main {
  */
 
 hr {
-  box-sizing: content-box; /* 1 */
+  // box-sizing: content-box; /* 1 */
   height: 0; /* 1 */
   overflow: visible; /* 2 */
 }
@@ -240,7 +252,7 @@ button:-moz-focusring,
  */
 
 legend {
-  box-sizing: border-box; /* 1 */
+  // box-sizing: border-box; /* 1 */
   color: inherit; /* 2 */
   display: table; /* 1 */
   max-width: 100%; /* 1 */
@@ -271,7 +283,7 @@ textarea {
 
 [type="checkbox"],
 [type="radio"] {
-  box-sizing: border-box; /* 1 */
+  // box-sizing: border-box; /* 1 */
   padding: 0; /* 2 */
 }
 
