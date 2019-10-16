@@ -2,14 +2,25 @@
 /* Document
    ========================================================================== */
 /**
+ * Add inheriting to box-sizing property for all elements
+ */
+*,
+*::before,
+*::after {
+  box-sizing: inherit; }
+
+/**
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in iOS.
+ * 3. Add normal box-sizing to all document (all elements inherit it because previous rule)
  */
 html {
-  line-height: 1.15;
+  line-height: 1.5;
   /* 1 */
   -webkit-text-size-adjust: 100%;
-  /* 2 */ }
+  /* 2 */
+  box-sizing: border-box;
+  /* 3 */ }
 
 /* Sections
    ========================================================================== */
@@ -36,8 +47,6 @@ main {
  * 2. Show the overflow in Edge and IE.
  */
 hr {
-  box-sizing: content-box;
-  /* 1 */
   height: 0;
   /* 1 */
   overflow: visible;
@@ -175,8 +184,6 @@ button:-moz-focusring,
  *    `fieldset` elements in all browsers.
  */
 legend {
-  box-sizing: border-box;
-  /* 1 */
   color: inherit;
   /* 2 */
   display: table;
@@ -201,8 +208,6 @@ textarea {
  */
 [type="checkbox"],
 [type="radio"] {
-  box-sizing: border-box;
-  /* 1 */
   padding: 0;
   /* 2 */ }
 
@@ -305,6 +310,16 @@ html,
 body {
   color: #000;
   font-family: "Roboto", "Helvetica", "Segoe UI", sans-serif; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden; }
 
 .page-layout {
   display: flex;

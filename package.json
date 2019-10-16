@@ -9,7 +9,8 @@
   "author": "Artur Trifonov",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^4.0.0",
+    "browser-sync": "^2.26.7",
+    "gulp": "^4.0.2",
     "gulp-autoprefixer": "^6.0.0",
     "gulp-clone": "^2.0.1",
     "gulp-concat": "^2.6.1",
@@ -27,5 +28,6 @@
     "> 1%",
     "maintained node versions",
     "not dead"
-  ]
+  ],
+  "dependencies": {}
 }
