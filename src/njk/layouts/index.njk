@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{{ title }} {{ ' — ' if (title != '') }} Site</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/img/favicons/favicon.ico">
+    <link rel="icon" href="/static/img/favicons/base-16x16.png" sizes="16x16">
+    <link rel="icon" href="/static/img/favicons/base-24x24.png" sizes="32x32">
+    <link rel="icon" href="/static/img/favicons/base-32x32.png" sizes="32x32">
+    <link rel="icon" href="/static/img/favicons/base-64x64.png" sizes="64x64">
+
+    <!-- MS -->
+    <meta name="application-name" content="Site name">
+    <meta name="msapplication-TileImage" content="/static/img/favicons/tile.jpg">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+    <!-- OS X -->
+    <link rel="mask-icon" href="/static/img/favicons/safari-pinned-tab.svg" color="#6961bf">
+    <!-- iOS -->
+    <meta name="apple-mobile-web-app-title" content="Site name">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/img/favicons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/img/favicons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicons/apple-touch-icon-180x180.png">
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <!-- og -->
+    <meta property="og:title" content="get from H1" />
+    <meta property="og:description" content="get from meta description" />
+    <meta property="og:image" content="/static/img/favicons/og.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Site name" />
+    <meta property="og:url" content="https://www.site.ru/" />
+    <meta property="og:locale" content="ru_RU" />
+</head>
+
+<body>
+    <div class="page-layout">
+		<header class="page-header">
+			{% include "blocks/page-header.njk" %}
+		</header>
+
+		<main class="page-main">
+			{% block content %}
+			{% endblock %}
+		</main>
+
+		<footer class="page-footer">
+			{% include "blocks/page-footer.njk" %}
+		</footer>
+    </div>
+
+	<!-- Scripts -->
+</body>
+<!-- Developed by Artur Trifonov frontend-design.ru -->
+</html>

@@ -8,6 +8,8 @@ var gulp = require('gulp'),
     clone = require('gulp-clone'),
     concat = require('gulp-concat'),
     include = require("gulp-include"),
+	nunjucks = require('gulp-nunjucks-render'),
+	prettier = require('gulp-prettier'),
     browserSync = require('browser-sync').create();
 
 gulp.task('sass', function () {
@@ -33,13 +35,21 @@ gulp.task('js', function() {
         .pipe(gulp.dest('dist/static/js'))
         .pipe(browserSync.stream());
 });
-
+gulp.task('njk', function() {
+	return gulp.src('src/njk/pages/**/*.njk')
+        .pipe(nunjucks({
+            path: ['src/njk/layouts']
+        }))
+        .pipe(prettier({ proseWrap: 'never', printWidth: 800, tabWidth: 4, useTabs: true }))
+        .pipe(gulp.dest('dist'))
+		.pipe(browserSync.stream());
+});
 
 gulp.task('default', function () {
 	browserSync.init({
         server: "./dist"
     });
     gulp.watch('src/scss/**/*.scss', gulp.series('sass')).on('change', browserSync.reload);
-    gulp.watch('dist/**/*.html').on('change', browserSync.reload);
+	gulp.watch('src/njk/**/*.njk', gulp.series('njk')).on('change', browserSync.reload);
     gulp.watch('src/js/**/*.js', gulp.series('js')).on('change', browserSync.reload);
 });
