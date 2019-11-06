@@ -38,6 +38,7 @@ Thumbs.db
 
 # My own #
 node_modules/
+dist/
 .ai
 .psd
 .sublime-project
