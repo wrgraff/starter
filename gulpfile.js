@@ -1,91 +1,106 @@
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
-    cssmin = require('gulp-cssmin'),
-    autoprefixer = require('gulp-autoprefixer'),
-    jshint = require('gulp-jshint'),
+	plumber = require('gulp-plumber'),
+	csso = require('gulp-csso'),
+	postcss = require('gulp-postcss'),
+    autoprefixer = require('autoprefixer'),
     uglify = require('gulp-uglify-es').default,
     rename = require('gulp-rename'),
-    clone = require('gulp-clone'),
-    concat = require('gulp-concat'),
-    include = require("gulp-include"),
 	nunjucks = require('gulp-nunjucks-render'),
+    clone = require('gulp-clone'),
 	prettier = require('gulp-prettier'),
+	typograf = require('gulp-typograf'),
+    concat = require('gulp-concat'),
 	imagemin = require('gulp-imagemin'),
 	webp = require('gulp-webp'),
 	del = require('del'),
+	imageResize = require('gulp-image-resize'),
+	babel = require('gulp-babel'),
     browserSync = require('browser-sync').create();
 
+// gulp.task('cut-img', () => {
+// 	return gulp.src('src/img/name/*.jpg')
+// 		.pipe(imageResize({
+// 			width: 458 * 2,
+// 			height: 300 * 2,
+// 			crop : true
+// 		}))
+// 		.pipe(rename({ suffix: '-size' }))
+// 		.pipe(gulp.dest('src/img/name/size/'));
+// });
+
 gulp.task('scss', () => {
-    return gulp.src('src/scss/style.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(autoprefixer({
-            cascade: false
-        }))
-        .pipe(gulp.dest('dist/static/css'))
-        .pipe(clone())
-        .pipe(cssmin())
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest('dist/static/css'))
+	return gulp.src('src/scss/style.scss')
+		.pipe(plumber())
+		.pipe(sass())
+		.pipe(postcss([ autoprefixer() ]))
+        .pipe(gulp.dest('dist/css/'))
         .pipe(browserSync.stream());
+		// .pipe(csso())
+        // .pipe(rename({ suffix: '.min' }))
+		// .pipe(gulp.dest('dist/css/'))
 });
 
 gulp.task('js', () => {
-    return gulp.src('src/js/scripts.js')
-        .pipe(include())
-        .on('error', console.log)
-        .pipe(gulp.dest('dist/static/js'))
-        .pipe(uglify())
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest('dist/static/js'))
+	return gulp.src('src/js/*.js')
+		.pipe(babel())
+        .pipe(concat('scripts.js'))
+		.pipe(gulp.dest('dist/js/'))
         .pipe(browserSync.stream());
+        // .pipe(uglify())
+        // .pipe(rename({ suffix: '.min' }))
+        // .pipe(gulp.dest('dist/static/js'))
 });
 
 gulp.task('njk', () => {
 	return gulp.src('src/njk/pages/**/*.njk')
         .pipe(nunjucks({
             path: ['src/njk/layouts']
-        }))
+		}))
+		.pipe(typograf({ locale: ['ru', 'en-US'], htmlEntity: { type: 'name' } }))
         .pipe(prettier({ proseWrap: 'never', printWidth: 800, tabWidth: 4, useTabs: true }))
-        .pipe(gulp.dest('dist'))
-		.pipe(browserSync.stream());
+        .pipe(gulp.dest('dist/'))
+        .pipe(browserSync.stream());
 });
 
 gulp.task('img', () => {
-	return gulp.src('src/img/**/*')
+	return gulp.src('src/img/**/*.{jpg,png,svg}')
 		.pipe(imagemin([
-		    imagemin.jpegtran({progressive: true}),
-		    imagemin.optipng({optimizationLevel: 3}),
-		    imagemin.svgo({
-		        plugins: [
-		            {cleanupIDs: true}
-		        ]
-		    })
+			imagemin.mozjpeg({quality: 75, progressive: true}),
+			imagemin.optipng({optimizationLevel: 3}),
+			imagemin.svgo({
+				plugins: [
+					{cleanupIDs: true}
+				]
+			})
 		]))
-        .pipe(gulp.dest('dist/static/img'))
+		.pipe(gulp.dest('dist/img'))
 		.pipe(webp())
-		.pipe(gulp.dest('dist/static/img'));
+		.pipe(gulp.dest('dist/img')); 
 });
 
 gulp.task('favicons', () => {
-	return gulp.src('src/favicons/**/*')
+	return gulp.src('src/img/**/*.{jpg,png,svg}')
 		.pipe(imagemin([
-		    imagemin.jpegtran({progressive: true}),
-		    imagemin.optipng({optimizationLevel: 3}),
-		    imagemin.svgo({
-		        plugins: [
-		            {cleanupIDs: true}
-		        ]
-		    })
+			imagemin.mozjpeg({quality: 75, progressive: true}),
+			imagemin.optipng({optimizationLevel: 3}),
+			imagemin.svgo({
+				plugins: [
+					{cleanupIDs: true}
+				]
+			})
 		]))
-        .pipe(gulp.dest('dist/static/favicons'));
+		.pipe(gulp.dest('dist/img'))
+		.pipe(webp())
+		.pipe(gulp.dest('dist/img')); 
 });
 
 gulp.task('fonts', () => {
-	return gulp.src('src/fonts/**/*{ttf,woff,woff2}')
-        .pipe(gulp.dest('dist/static/fonts'));
+	return gulp.src('src/fonts/**/*{woff,woff2}')
+        .pipe(gulp.dest('dist/fonts'));
 });
 
-gulp.task('manifest', () => {
+gulp.task('settings', () => {
 	return gulp.src('src/**/*{xml,json}')
         .pipe(gulp.dest('dist/'));
 });
@@ -94,32 +109,43 @@ gulp.task('del', () => {
 	return del('dist');
 });
 
-
 gulp.task('serve', () => {
 	browserSync.init({
-        server: "./dist"
+		server: "dist",
+		routes: {},
+        middleware: function (req, res, next) {
+            if (/\.json|\.txt|\.html/.test(req.url) && req.method.toUpperCase() == 'POST') {
+                console.log('[POST => GET] : ' + req.url);
+                req.method = 'GET';
+            }
+            next();
+        }
     });
 
-    gulp.watch('src/scss/**/*.scss', gulp.series('scss'));
-	gulp.watch('src/njk/**/*.njk', gulp.series('njk'));
-    gulp.watch('src/js/**/*.js', gulp.series('js'));
+	gulp.watch('src/img/**/*{jpg,png,svg}', gulp.series('img'));
 
-	gulp.watch('src/dist/**/*.js').on('change', browserSync.reload);
-	gulp.watch('src/dist/**/*.html').on('change', browserSync.reload);
+    gulp.watch('src/scss/**/*.scss', gulp.series('scss'));
+    gulp.watch('src/js/*.js', gulp.series('js'));
+	gulp.watch('src/njk/**/*.njk', gulp.series('njk'));
+
+	gulp.watch('dist/**/*.js').on('change', browserSync.reload);
+	gulp.watch('dist/**/*{jpg,png,svg}').on('change', browserSync.reload);
 });
 
 gulp.task('build', gulp.series(
 	'del',
 	'scss',
-	'njk',
 	'js',
+	'njk',
+	'fonts',
 	'img',
 	'favicons',
-	'fonts',
-	'manifest'
+	'settings'
 ));
 
-gulp.task('default', gulp.series(
+gulp.task('start', gulp.series(
 	'build',
 	'serve'
 ));
+
+gulp.task('default', gulp.series('serve'));
