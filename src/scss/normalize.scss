@@ -143,11 +143,11 @@ sup {
 }
 
 sub {
-  bottom: -0.25em;
+  bottom: -.25em;
 }
 
 sup {
-  top: -0.5em;
+  top: -.5em;
 }
 
 /* Embedded content
@@ -156,11 +156,13 @@ sup {
 /**
  * 1. Remove the border on images inside links in IE 10.
  * 2. Fit all images into their containers
+ * 3. Set normal height for fitted to 100% container images
  */
 
 img {
   border-style: none; /* 1 */
   max-width: 100%; /* 2 */
+  height: auto; /* 3 */
 }
 
 /* Forms

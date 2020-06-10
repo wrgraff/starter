@@ -1,9 +1,0 @@
-$font-sizes: (
-    small: 14px,
-    medium: 16px,
-    large: 20px,
-);
-
-@function font-size($name) {
-    @return map-get($font-sizes, $name);
-}

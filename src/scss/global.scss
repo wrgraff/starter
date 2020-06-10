@@ -1,0 +1,42 @@
+body {
+	min-width: 320px;
+
+	font-family: $font-family, 'Helvetica Neue', 'Segoe UI', sans-serif;
+    line-height: 1.5;
+}
+
+a {
+	color: $primary-color;
+
+	text-decoration: none;
+
+	transition: color 200ms;
+
+	&:not([class]) {
+		border-bottom: 1px solid;
+	}
+
+	&:hover {
+		color: $secondary-color;
+	}
+
+	&:focus {
+		@include outline;
+	}
+}
+
+p {
+	margin: 0 0 12px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-top: 0;
+	margin-bottom: 16px;
+
+	line-height: 1.3;
+}

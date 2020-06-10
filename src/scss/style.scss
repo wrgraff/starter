@@ -1,2 +1,6 @@
-@import "variables/common";
-@import "modules/common";
+@import 'variables';
+@import 'mixins';
+@import 'fonts';
+@import 'normalize';
+@import 'global';
+@import 'blocks/common';
