@@ -1,7 +1,10 @@
 {
   "private": "true",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "stylelint": "stylelint \"src/scss/**/*.scss\" --syntax scss",
+    "test": "npm run stylelint",
+    "build": "gulp build",
+    "start": "gulp start"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
@@ -26,7 +29,8 @@
     "gulp-typograf": "^4.0.3",
     "gulp-uglify-es": "^2.0.0",
     "gulp-webp": "^4.0.1",
-    "jshint": "^2.11.1"
+    "jshint": "^2.11.1",
+    "stylelint": "^13.6.0"
   },
   "browserslist": [
     "last 2 version",
