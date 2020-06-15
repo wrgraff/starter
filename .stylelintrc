@@ -27,6 +27,7 @@
         ]
       }
     ],
+    "indentation": 4,
     "declaration-block-no-shorthand-property-overrides": true,
     "font-family-no-duplicate-names": true,
     "font-family-no-missing-generic-family-keyword": true,
