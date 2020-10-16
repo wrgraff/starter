@@ -7,8 +7,8 @@ Starter template for simple start
 `npm start` or `gulp start`
 Runs build and then server on localhost ([http://localhost:3000](http://localhost:3000) by default)
 
-`npm start`
-Runs stylelint script (`npm stylelint`)
+`npm test`
+Runs stylelint and editorconfig (`npm run stylelint && npm run editorconfig`)
 
 `npm run build` or `gulp build`
 Runs build
