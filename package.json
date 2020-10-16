@@ -22,7 +22,6 @@
         "gulp-csso": "^4.0.1",
         "gulp-image-resize": "^0.13.1",
         "gulp-imagemin": "^7.1.0",
-        "gulp-livereload": "^4.0.2",
         "gulp-nunjucks-render": "^2.2.3",
         "gulp-plumber": "^1.2.1",
         "gulp-postcss": "^8.0.0",
