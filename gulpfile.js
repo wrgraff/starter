@@ -36,10 +36,10 @@ const scss = () => {
         .pipe(sass())
         .pipe(postcss([ autoprefixer() ]))
         .pipe(gulp.dest('dist/css/'))
-        .pipe(browserSync.stream());
         // .pipe(csso())
         // .pipe(rename({ suffix: '.min' }))
         // .pipe(gulp.dest('dist/css/'))
+        .pipe(browserSync.stream());
 };
 exports.scss = scss;
 
@@ -48,10 +48,10 @@ const js = () => {
         .pipe(babel())
         .pipe(concat('scripts.js'))
         .pipe(gulp.dest('dist/js/'))
-        .pipe(browserSync.stream());
         // .pipe(uglify())
         // .pipe(rename({ suffix: '.min' }))
         // .pipe(gulp.dest('dist/static/js'))
+        .pipe(browserSync.stream());
 };
 exports.js = js;
 
@@ -120,7 +120,7 @@ exports.clear = clear;
 
 const serve = () => {
     browserSync.init({
-        server: "dist",
+        server: 'dist',
         routes: {},
         middleware: function (req, res, next) {
             if (/\.json|\.txt|\.html/.test(req.url) && req.method.toUpperCase() == 'POST') {
