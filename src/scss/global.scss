@@ -6,7 +6,7 @@ body {
 }
 
 a {
-    color: $primary-color;
+    color: $color-primary;
 
     text-decoration: none;
 
@@ -17,7 +17,7 @@ a {
     }
 
     &:hover {
-        color: $secondary-color;
+        color: $color-secondary;
     }
 
     &:focus {
