@@ -3,7 +3,8 @@
     "scripts": {
         "stylelint": "stylelint \"src/scss/**/*.scss\" --syntax scss",
         "editorconfig": "editorconfig-checker --exclude '.git|node_modules|.DS_Store'",
-        "test": "npm run stylelint && npm run editorconfig",
+        "eslint": "eslint \"src/js/**/*.js\"",
+        "test": "npm run stylelint && npm run editorconfig && npm run eslint",
         "build": "gulp build",
         "start": "gulp dev",
         "deploy": "cd dist && rsync --archive --compress --delete . arturtrifonov@209.250.253.253:/var/www/idealcode.site/html/"
@@ -16,6 +17,7 @@
         "cssnano": "^4.1.10",
         "del": "^5.1.0",
         "editorconfig-checker": "^3.3.0",
+        "eslint": "^7.21.0",
         "gulp": "^4.0.2",
         "gulp-babel": "^8.0.0",
         "gulp-cheerio": "^1.0.0",

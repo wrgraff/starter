@@ -1,6 +1,6 @@
 const utils = {
     createElement(template) {
-        const elementContainer = document.createElement(`div`);
+        const elementContainer = document.createElement('div');
         elementContainer.innerHTML = template;
 
         return elementContainer.children[0];
