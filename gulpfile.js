@@ -2,18 +2,18 @@ const gulp = require('gulp'),
     sass = require('gulp-sass'),
     plumber = require('gulp-plumber'),
     postcss = require('gulp-postcss'),
-    csso = require('postcss-csso'),
+    cssnano = require('cssnano'),
     autoprefixer = require('autoprefixer'),
     uglify = require('gulp-uglify-es').default,
     rename = require('gulp-rename'),
     nunjucks = require('gulp-nunjucks-render'),
-    clone = require('gulp-clone'),
     prettier = require('gulp-prettier'),
     typograf = require('gulp-typograf'),
     include = require('gulp-include'),
-    concat = require('gulp-concat'),
     imagemin = require('gulp-imagemin'),
     webp = require('gulp-webp'),
+    svgstore = require('gulp-svgstore'),
+    cheerio = require('gulp-cheerio'),
     del = require('del'),
     imageResize = require('gulp-image-resize'),
     babel = require('gulp-babel'),
@@ -44,7 +44,7 @@ const stylesBuild = () => {
         .pipe(sass())
         .pipe(postcss([
             autoprefixer(),
-            csso()
+            cssnano()
         ]))
         .pipe(gulp.dest('dist/css/'));
 };
@@ -117,12 +117,37 @@ const optimizeImgs = () => {
 };
 exports.optimizeImgs = optimizeImgs;
 
-const createWebp = () => {
-    return gulp.src('src/img/**/*.{jpg,png}')
-        .pipe(webp())
-        .pipe(gulp.dest('dist/img')); 
+const createWebp = done => {
+    gulp.src('src/img/**/*.{jpg,png}')
+    .pipe(webp())
+    .pipe(gulp.dest('dist/img')); 
+    done();
 };
 exports.createWebp = createWebp;
+
+const icons = () => {
+    return gulp.src('src/img/ico/**/*.svg')
+        .pipe(imagemin([
+            imagemin.svgo({
+                plugins: [
+                    {
+                        cleanupIDs: true
+                    }, {
+                        removeViewBox: false
+                    }
+                ]
+            })
+        ]))
+        .pipe(cheerio({
+            run: function ($) {
+                $('[fill]').attr('fill', 'currentColor');
+            },
+            parserOptions: { xmlMode: true }
+        }))
+        .pipe(svgstore())
+        .pipe(gulp.dest('dist/img'));
+};
+exports.icons = icons;
 
 const clear = () => {
     return del('dist');
@@ -174,11 +199,10 @@ const build = gulp.series(
         scriptsBuild,
         pagesBuild,
         createWebp,
-        gulp.series(
-            copy,
-            optimizeImgs
-        )
-    )
+        copy
+    ),
+    optimizeImgs,
+    icons
 );
 exports.build = build;
 
@@ -189,7 +213,8 @@ const dev = gulp.series(
         scriptsDev,
         pagesDev,
         createWebp,
-        copy
+        copy,
+        icons
     ),
     serve,
     watch
