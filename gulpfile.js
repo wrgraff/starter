@@ -1,8 +1,8 @@
 const gulp = require('gulp'),
     sass = require('gulp-sass'),
     plumber = require('gulp-plumber'),
-    csso = require('gulp-csso'),
     postcss = require('gulp-postcss'),
+    csso = require('postcss-csso'),
     autoprefixer = require('autoprefixer'),
     uglify = require('gulp-uglify-es').default,
     rename = require('gulp-rename'),
@@ -10,6 +10,7 @@ const gulp = require('gulp'),
     clone = require('gulp-clone'),
     prettier = require('gulp-prettier'),
     typograf = require('gulp-typograf'),
+    include = require('gulp-include'),
     concat = require('gulp-concat'),
     imagemin = require('gulp-imagemin'),
     webp = require('gulp-webp'),
@@ -30,95 +31,105 @@ const cutImg = () => {
 };
 exports.cutImg = cutImg;
 
-const scss = () => {
+const stylesDev = () => {
     return gulp.src('src/scss/style.scss')
         .pipe(plumber())
         .pipe(sass())
-        .pipe(postcss([ autoprefixer() ]))
         .pipe(gulp.dest('dist/css/'))
-        // .pipe(csso())
-        // .pipe(rename({ suffix: '.min' }))
-        // .pipe(gulp.dest('dist/css/'))
         .pipe(browserSync.stream());
 };
-exports.scss = scss;
+const stylesBuild = () => {
+    return gulp.src('src/scss/style.scss')
+        .pipe(plumber())
+        .pipe(sass())
+        .pipe(postcss([
+            autoprefixer(),
+            csso()
+        ]))
+        .pipe(gulp.dest('dist/css/'));
+};
+exports.stylesDev = stylesDev;
+exports.stylesBuild = stylesBuild;
 
-const js = () => {
-    return gulp.src('src/js/*.js')
+const scriptsDev = () => {
+    return gulp.src('src/js/scripts.js')
+        .pipe(include())
         .pipe(babel())
-        .pipe(concat('scripts.js'))
         .pipe(gulp.dest('dist/js/'))
-        // .pipe(uglify())
-        // .pipe(rename({ suffix: '.min' }))
-        // .pipe(gulp.dest('dist/static/js'))
         .pipe(browserSync.stream());
 };
-exports.js = js;
+const scriptsBuild = () => {
+    return gulp.src('src/js/scripts.js')
+        .pipe(include())
+        .pipe(babel())
+        .pipe(uglify())
+        .pipe(gulp.dest('dist/js/'));
+};
+exports.scriptsDev = scriptsDev;
+exports.scriptsBuild = scriptsBuild;
 
-const njk = () => {
+const pagesDev = () => {
+    return gulp.src('src/njk/pages/**/*.njk')
+        .pipe(nunjucks({
+            path: ['src/njk/layouts']
+        }))
+        .pipe(gulp.dest('dist/'))
+        .pipe(browserSync.stream());
+};
+const pagesBuild = () => {
     return gulp.src('src/njk/pages/**/*.njk')
         .pipe(nunjucks({
             path: ['src/njk/layouts']
         }))
         .pipe(typograf({ locale: ['ru', 'en-US'], htmlEntity: { type: 'name' } }))
         .pipe(prettier({ proseWrap: 'never', printWidth: 800, tabWidth: 4, useTabs: true }))
-        .pipe(gulp.dest('dist/'))
-        .pipe(browserSync.stream());
-};
-exports.njk = njk;
-
-const img = () => {
-    return gulp.src('src/img/**/*.{jpg,png,svg}')
-        .pipe(imagemin([
-            imagemin.mozjpeg({quality: 75, progressive: true}),
-            imagemin.optipng({optimizationLevel: 3}),
-            imagemin.svgo({
-                plugins: [
-                    {cleanupIDs: true}
-                ]
-            })
-        ]))
-        .pipe(gulp.dest('dist/img'))
-        .pipe(webp())
-        .pipe(gulp.dest('dist/img')); 
-};
-exports.img = img;
-
-const favicons = () => {
-    return gulp.src('src/img/**/*.{jpg,png,svg}')
-        .pipe(imagemin([
-            imagemin.mozjpeg({quality: 75, progressive: true}),
-            imagemin.optipng({optimizationLevel: 3}),
-            imagemin.svgo({
-                plugins: [
-                    {cleanupIDs: true}
-                ]
-            })
-        ]))
-        .pipe(gulp.dest('dist/img'))
-        .pipe(webp())
-        .pipe(gulp.dest('dist/img')); 
-};
-exports.favicons = favicons;
-
-const fonts = () => {
-    return gulp.src('src/fonts/**/*{woff,woff2}')
-        .pipe(gulp.dest('dist/fonts'));
-};
-exports.fonts = fonts;
-
-const settings = () => {
-    return gulp.src('src/**/*{xml,json}')
         .pipe(gulp.dest('dist/'));
 };
-exports.settings = settings;
+exports.pagesDev = pagesDev;
+exports.pagesBuild = pagesBuild;
+
+const copy = done => {
+    gulp.src([
+        'src/img/**/*.{jpg,png,svg}',
+        'src/favicons/**/*.{jpg,png,svg}',
+        'src/fonts/*.{woff2,woff}',
+        'src/*.{xml,json}'
+    ], {
+        base: 'src'
+    })
+    .pipe(gulp.dest('dist'));
+    done();
+}
+exports.copy = copy;
+
+const optimizeImgs = () => {
+    return gulp.src('dist/**/*.{jpg,png,svg}')
+        .pipe(imagemin([
+            imagemin.mozjpeg({quality: 75, progressive: true}),
+            imagemin.optipng({optimizationLevel: 3}),
+            imagemin.svgo({
+                plugins: [
+                    {cleanupIDs: true}
+                ]
+            })
+        ]))
+        .pipe(gulp.dest('dist')); 
+};
+exports.optimizeImgs = optimizeImgs;
+
+const createWebp = () => {
+    return gulp.src('src/img/**/*.{jpg,png}')
+        .pipe(webp())
+        .pipe(gulp.dest('dist/img')); 
+};
+exports.createWebp = createWebp;
 
 const clear = () => {
     return del('dist');
 };
 exports.clear = clear;
 
-const serve = () => {
+const serve = done => {
     browserSync.init({
         server: 'dist',
         routes: {},
@@ -130,32 +141,58 @@ const serve = () => {
             next();
         }
     });
-
-    gulp.watch('src/scss/**/*.scss', gulp.series('scss'));
-    gulp.watch('src/js/*.js', gulp.series('js'));
-    gulp.watch('src/njk/**/*.njk', gulp.series('njk'));
-    gulp.watch('src/img/**/*{jpg,png,svg}', gulp.series('img'));
-
-    gulp.watch('dist/**/*{jpg,png,svg}').on('change', browserSync.reload);
+    done();
 };
 exports.serve = serve;
-exports.default = serve;
+
+const reload = done => {
+    browserSync.reload();
+    done();
+};
+
+const watch = () => {
+    gulp.watch('src/scss/**/*.scss', gulp.series(stylesDev));
+    gulp.watch('src/js/**/*.js', gulp.series(scriptsDev));
+    gulp.watch('src/njk/**/*.njk', gulp.series(pagesDev, reload));
+
+    gulp.watch([
+        'src/img/**/*.{jpg,png,svg}',
+        'src/favicons/**/*.{jpg,png,svg}',
+        'src/fonts/*.{woff2,woff}',
+        'src/*.{xml,json}'
+    ], gulp.series(copy));
+
+    gulp.watch([
+        'src/img/**/*.{jpg,png}'
+    ], gulp.series(createWebp));
+};
 
 const build = gulp.series(
     clear,
     gulp.parallel(
-        scss,
-        js,
-        njk,
-        fonts,
-        img,
-        favicons,
-        settings
-    ),
+        stylesBuild,
+        scriptsBuild,
+        pagesBuild,
+        createWebp,
+        gulp.series(
+            copy,
+            optimizeImgs
+        )
+    )
 );
 exports.build = build;
 
-exports.start = gulp.series(
-    build,
-    serve
+const dev = gulp.series(
+    clear,
+    gulp.parallel(
+        stylesDev,
+        scriptsDev,
+        pagesDev,
+        createWebp,
+        copy
+    ),
+    serve,
+    watch
 );
+exports.dev = dev;
+exports.default = dev;
