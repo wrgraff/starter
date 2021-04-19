@@ -5,6 +5,7 @@
         "editorconfig": "editorconfig-checker --exclude '.git|node_modules|.DS_Store'",
         "eslint": "eslint \"src/js/**/*.js\"",
         "test": "npm run stylelint && npm run editorconfig && npm run eslint",
+        "html": "node-w3c-validator -i ./dist/**/*.html --exclude ./dist/**/demos/** -f lint -evH",
         "build": "gulp build",
         "start": "gulp dev",
         "deploy": "cd dist && rsync --archive --compress --delete . arturtrifonov@209.250.253.253:/var/www/idealcode.site/html/"
@@ -34,6 +35,7 @@
         "gulp-terser": "^2.0.1",
         "gulp-typograf": "^4.0.3",
         "gulp-webp": "^4.0.1",
+        "node-w3c-validator": "^2.0.1",
         "rollup-stream": "^1.24.1",
         "stylelint": "^13.12.0",
         "vinyl-buffer": "^1.0.1",
