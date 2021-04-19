@@ -2,6 +2,7 @@
 [![](https://github.com/wrgraff/starter/workflows/EditorConfig/badge.svg)](https://github.com/wrgraff/starter/actions?query=workflow%3AEditorConfig)
 [![](https://github.com/wrgraff/starter/workflows/ESLint/badge.svg)](https://github.com/wrgraff/starter/actions?query=workflow%3AESLint)
 [![](https://github.com/wrgraff/starter/workflows/Stylelint/badge.svg)](https://github.com/wrgraff/starter/actions?query=workflow%3AStylelint)
+[![](https://github.com/wrgraff/starter/workflows/Deploy/badge.svg)](https://github.com/wrgraff/starter/actions?query=workflow%3ADeploy)
 
 Стартовый шаблон для создания верстки
 
