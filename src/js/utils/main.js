@@ -35,3 +35,5 @@ const utils = {
 };
 
 utils.throttle('scroll', 'optimizedScroll');
+
+export default utils;

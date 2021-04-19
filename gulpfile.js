@@ -1,22 +1,26 @@
-const gulp = require('gulp'),
+const
+    gulp = require('gulp'),
     sass = require('gulp-sass'),
     plumber = require('gulp-plumber'),
     postcss = require('gulp-postcss'),
     cssnano = require('cssnano'),
     autoprefixer = require('autoprefixer'),
-    uglify = require('gulp-uglify-es').default,
     rename = require('gulp-rename'),
     nunjucks = require('gulp-nunjucks-render'),
     prettier = require('gulp-prettier'),
     typograf = require('gulp-typograf'),
-    include = require('gulp-include'),
     imagemin = require('gulp-imagemin'),
     webp = require('gulp-webp'),
     svgstore = require('gulp-svgstore'),
     cheerio = require('gulp-cheerio'),
-    del = require('del'),
     imageResize = require('gulp-image-resize'),
+    rollup = require('rollup-stream'),
     babel = require('gulp-babel'),
+    buffer = require('vinyl-buffer'),
+    source = require('vinyl-source-stream'),
+    terser = require('gulp-terser'),
+    replace = require('gulp-replace'),
+    del = require('del'),
     browserSync = require('browser-sync').create();
 
 const cutImg = () => {
@@ -52,29 +56,33 @@ exports.stylesDev = stylesDev;
 exports.stylesBuild = stylesBuild;
 
 const scriptsDev = () => {
-    return gulp.src('src/js/scripts.js')
-        .pipe(include())
-        .pipe(babel())
+    return gulp.src('src/js/**/*.js')
         .pipe(gulp.dest('dist/js/'))
         .pipe(browserSync.stream());
 };
 const scriptsBuild = () => {
-    return gulp.src('src/js/scripts.js')
-        .pipe(include())
-        .pipe(babel())
-        .pipe(uglify())
+    return rollup({
+        input: 'src/js/index.js',
+        format: 'iife',
+    })
+        .pipe(source('scripts.js'))
+        .pipe(buffer())
+        .pipe(babel({
+            presets: ['@babel/preset-env'],
+        }))
+        .pipe(terser())
         .pipe(gulp.dest('dist/js/'));
 };
 exports.scriptsDev = scriptsDev;
 exports.scriptsBuild = scriptsBuild;
 
-const pagesDev = () => {
-    return gulp.src('src/njk/pages/**/*.njk')
+const pagesDev = done => {
+    gulp.src('src/njk/pages/**/*.njk')
         .pipe(nunjucks({
             path: ['src/njk/layouts']
         }))
-        .pipe(gulp.dest('dist/'))
-        .pipe(browserSync.stream());
+        .pipe(gulp.dest('dist/'));
+    done();
 };
 const pagesBuild = () => {
     return gulp.src('src/njk/pages/**/*.njk')
@@ -97,10 +105,19 @@ const copy = done => {
     ], {
         base: 'src'
     })
-    .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist'));
     done();
 }
 exports.copy = copy;
+
+const paths = () => {
+    return gulp.src('dist/**/*.html')
+        .pipe(replace(
+            /(<script) type="module"( src="\/js)\/index(.js">)/, '<script src="/js/scripts.js">'
+        ))
+        .pipe(gulp.dest('dist'));
+};
+exports.paths = paths;
 
 const optimizeImgs = () => {
     return gulp.src('dist/**/*.{jpg,png,svg}')
@@ -201,6 +218,7 @@ const build = gulp.series(
         createWebp,
         copy
     ),
+    paths,
     optimizeImgs,
     icons
 );
