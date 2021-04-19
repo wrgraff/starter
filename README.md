@@ -1,4 +1,5 @@
 # Шаблон для верстки
+[![](https://github.com/wrgraff/starter/workflows/EditorConfig/badge.svg)](https://github.com/wrgraff/starter/actions?query=workflow%3AEditorConfig)
 
 Стартовый шаблон для создания верстки
 
