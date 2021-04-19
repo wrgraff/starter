@@ -5,7 +5,7 @@
         "editorconfig": "editorconfig-checker --exclude '.git|node_modules|.DS_Store'",
         "eslint": "eslint \"src/js/**/*.js\"",
         "test": "npm run stylelint && npm run editorconfig && npm run eslint",
-        "html": "node-w3c-validator -i ./dist/**/*.html --exclude ./dist/**/demos/** -f lint -evH",
+        "html": "node-w3c-validator -i ./dist/**/*.html -f lint -evH",
         "build": "gulp build",
         "start": "gulp dev",
         "deploy": "cd dist && rsync --archive --compress --delete . arturtrifonov@209.250.253.253:/var/www/idealcode.site/html/"
